@@ -24,9 +24,11 @@ def load_map(map_path):
     print(f"file type.. : {map_check}\n")
     
     for _ in range(height):
-        map.append(fp.readline().replace("\n", ""))
+        raw_str = fp.readline().replace("\n", "")
+        map.append(list(raw_str))
     
     print(f"map loaded successfully; height = {height}, width = {width}\n")
+    
     fp.close()
     return height, width, map
 
