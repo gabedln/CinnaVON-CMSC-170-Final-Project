@@ -12,7 +12,7 @@ def read_map(filename):
     grid = []
     for i in range(4, 4 + height): # map rows start after the 4 header lines (type, height, width, map)
         grid.append(lines[i])
-    return grid, width, height
+    return height, width, grid
 
 # READING THE .scen FILE
 def read_scen(filename):

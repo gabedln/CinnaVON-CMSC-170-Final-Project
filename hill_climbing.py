@@ -8,7 +8,7 @@ it looks for the lowest values, since it is trying to find the shortest distance
 import importlib
 import math
 
-thisimport = importlib.import_module("load-map")
+thisimport = importlib.import_module("load_map")
 load_map = thisimport.load_map
 
 # Heuristic function for estimating distance in octile grid
