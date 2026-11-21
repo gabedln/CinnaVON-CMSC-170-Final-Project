@@ -6,10 +6,14 @@ it looks for the lowest values, since it is trying to find the shortest distance
 '''
 
 import math
-from load_map import read_map as load_map
-from a_ucs import get_neighbors # same movement rules as UCS and A* (no corner cutting)
-from a_ucs import TOLERANCE # same allowed rounding difference when checking optimality
-import time # for measuring the runtime
+import time  # for measuring the runtime
+
+from a_ucs import (
+    TOLERANCE,  # same allowed rounding difference when checking optimality
+    get_neighbors,  # same movement rules as UCS and A* (no corner cutting)
+)
+from load_map import read_map
+
 
 # Heuristic function for estimating distance in octile grid
 def octile_distance(x1, y1, x2, y2):
@@ -73,7 +77,7 @@ def hill_climbing(map_data, height, width, start_x, start_y, goal_x, goal_y):
 
 # RUNNING HILL CLIMBING ON ONE SCENARIO AND TIMING IT (same output format as run_one in a_ucs.py)
 def run_hill_climbing(grid, width, height, scenario):
-    bucket, start, goal, optimal = scenario
+    _bucket, start, goal, optimal = scenario
     start_time = time.time()
     path, cost, nodes_expanded = hill_climbing(grid, height, width, start[0], start[1], goal[0], goal[1])
     runtime = time.time() - start_time # in seconds
@@ -96,7 +100,7 @@ if __name__ == "__main__":
     for index, item in enumerate(coordinates):
         coordinates[index] = int(item)
 
-    mapdets = load_map("dao-map/arena.map")
+    mapdets = read_map("dao-map/arena.map")
 
     results = hill_climbing(mapdets[2], mapdets[0], mapdets[1], coordinates[0], coordinates[1], coordinates[2], coordinates[3])
 
