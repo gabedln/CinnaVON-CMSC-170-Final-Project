@@ -1,8 +1,9 @@
-import heapq # priority queue, so we always get the node with the lowest f(n) first
-import time # for measuring the runtime of each search
+import heapq  # priority queue, so we always get the node with the lowest f(n) first
+import math
+import time  # for measuring the runtime of each search
 
 TOLERANCE = 0.001 # allowed difference from the optimal length because of float rounding
-DIAGONAL_COST = 2 ** (1 / 2) # sqrt(2), cost of moving diagonally, straight moves cost 1
+DIAGONAL_COST = math.sqrt(2) # sqrt(2), cost of moving diagonally, straight moves cost 1
 PASSABLE = ".GS" # chars that can be walked on, everything else is blocked
 
 
@@ -14,24 +15,14 @@ PASSABLE = ".GS" # chars that can be walked on, everything else is blocked
 # zero heuristic (for UCS)
 def zero_heuristic(start, goal):
     return 0
+
 # octile distance heuristic (for A*)
 def octile_distance(cell, goal):
-    dx = cell[0] - goal[0]
-    if dx < 0:
-        dx = -dx # |x1 - x2|
-    dy = cell[1] - goal[1]
-    if dy < 0:
-        dy = -dy # |y1 - y2|
-
-    if dx > dy:
-        bigger = dx
-        smaller = dy
-    else:
-        bigger = dy
-        smaller = dx
+    dx = abs(cell[0] - goal[0])
+    dy = abs(cell[1] - goal[1])
     # go diagonal for the smaller part, then straight for the rest
     # h = max(dx, dy) + (sqrt(2) - 1) * min(dx, dy)
-    return bigger + (DIAGONAL_COST - 1) * smaller
+    return max(dx,dy) + (DIAGONAL_COST - 1) * min(dx,dy)
 
 
 # CHECKING IF A CELL CAN BE WALKED ON
@@ -53,7 +44,7 @@ def get_neighbors(grid, width, height, x, y):
             continue # blocked or outside the map
 
         if dx != 0 and dy != 0:
-            # diagonal move, no corner cutting: both side cells beside it must be open too
+            # for a diagonal to be passable, both the horizontal and vertical neighbors must also be passable (no corner cutting)
             if not is_passable(grid, width, height, x + dx, y) or not is_passable(grid, width, height, x, y + dy):
                 continue
             neighbors.append([(new_x, new_y), DIAGONAL_COST])
@@ -94,7 +85,7 @@ def search(grid, width, height, start, goal, heuristic):
     peak_open = 1 # biggest size the open list reached, our memory metric
 
     while len(open_list) > 0: # while openList is not empty
-        f, g, tie, best_node = heapq.heappop(open_list) # bestNode = openList.removeMinF()
+        _f, g, _tie, best_node = heapq.heappop(open_list) # bestNode = openList.removeMinF()
 
         if best_node in closed_list:
             continue # this is an old copy, a better one was already expanded (instead of delete(duplicate))
@@ -116,16 +107,15 @@ def search(grid, width, height, start, goal, heuristic):
             tie_breaker += 1
             new_f = new_g + heuristic(x, goal) # f(n) = g(n) + h(n)
             heapq.heappush(open_list, (new_f, new_g, tie_breaker, x)) # openList.add(x)
-
-        if len(open_list) > peak_open:
-            peak_open = len(open_list)
+            
+        peak_open = max(peak_open, len(open_list)) # update the peak size of the open list
 
     return None, None, nodes_expanded, peak_open # no path found
 
 
 # RUNNING ONE METHOD ON ONE SCENARIO AND TIMING IT
 def run_one(grid, width, height, scenario, heuristic):
-    bucket, start, goal, optimal = scenario
+    _bucket, start, goal, optimal = scenario
     start_time = time.time()
     path, cost, nodes_expanded, peak_open = search(grid, width, height, start, goal, heuristic)
     runtime = time.time() - start_time # in seconds
@@ -133,8 +123,6 @@ def run_one(grid, width, height, scenario, heuristic):
     if path is None:
         return [False, 0, nodes_expanded, peak_open, runtime, False]
 
-    difference = cost - optimal
-    if difference < 0:
-        difference = -difference # |cost - optimal|
+    difference = abs(cost - optimal)
     is_optimal = difference < TOLERANCE # same as the .scen optimal length?
     return [True, cost, nodes_expanded, peak_open, runtime, is_optimal]
