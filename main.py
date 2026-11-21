@@ -129,6 +129,7 @@ def main():
             if idx % 25 == 0 or idx == len(map_names): # for ever 25 maps, or if we are on the last map, we print the progress of how many maps have been completed for the current game
                 print(f" {game_name}: {idx}/{len(map_names)} maps done")
         
+        show("", out_file)
         show(f"Game: {game_name} ({len(map_names)} maps, {len(game_scenarios)} scenarios)", out_file)
         show(TABLE_HEADER, out_file)
 
