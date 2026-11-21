@@ -11,8 +11,8 @@ import time  # for measuring the runtime
 from a_ucs import (
     TOLERANCE,  # same allowed rounding difference when checking optimality
     get_neighbors,  # same movement rules as UCS and A* (no corner cutting)
+    is_passable,  # same terrain passability check as UCS and A* (handles W, @, O, T)
 )
-from load_map import read_map
 
 
 # Heuristic function for estimating distance in octile grid
@@ -27,10 +27,7 @@ def hill_climbing(map_data, height, width, start_x, start_y, goal_x, goal_y):
     goal = (goal_x, goal_y)
 
     # Bounds and terrain validation
-    if not (0 <= start_x < width and 0 <= start_y < height) or not (0 <= goal_x < width and 0 <= goal_y < height):
-        return None, float('inf'), 0
-
-    if map_data[start_y][start_x] in ('@', 'O', 'T') or map_data[goal_y][goal_x] in ('@', 'O', 'T'):
+    if not is_passable(map_data, width, height, start_x, start_y) or not is_passable(map_data, width, height, goal_x, goal_y):
         return None, float('inf'), 0
 
     if start == goal:
@@ -92,16 +89,3 @@ def run_hill_climbing(grid, width, height, scenario):
         difference = -difference # |cost - optimal|
     is_optimal = difference < TOLERANCE # same as the .scen optimal length?
     return [True, cost, nodes_expanded, peak_open, runtime, is_optimal]
-
-
-if __name__ == "__main__":
-    coordinates = input("Enter start and goal coordinates separated by whitespaces in this order: \n<start x> <start y> <goal x> <goal y>: ")
-    coordinates = coordinates.split()
-    for index, item in enumerate(coordinates):
-        coordinates[index] = int(item)
-
-    mapdets = read_map("dao-map/arena.map")
-
-    results = hill_climbing(mapdets[2], mapdets[0], mapdets[1], coordinates[0], coordinates[1], coordinates[2], coordinates[3])
-
-    print(results)
