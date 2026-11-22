@@ -753,8 +753,22 @@ a:focus {
 
 
 /* Custom layout additions for paper sections, game covers, figures, and references */
+.container.is-max-desktop {
+  max-width: 1080px !important;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+.hero-body {
+  padding: 2.75rem 1.5rem;
+}
+
 .section {
-  padding: 3.5rem 1.5rem;
+  padding: 2.75rem 1.5rem;
+}
+
+.title.is-3 {
+  margin-bottom: 1.5rem !important;
 }
 
 .publication-title {
@@ -763,32 +777,50 @@ a:focus {
 }
 
 .paper-content {
-  font-size: 1.05rem;
-  line-height: 1.75;
+  font-size: 1.04rem;
+  line-height: 1.72;
   color: var(--text-primary);
 }
 
 .paper-content p {
-  margin-bottom: 1.15rem;
+  margin-bottom: 1rem;
 }
 
 .paper-content ul {
-  margin-top: 0.5rem;
-  margin-bottom: 1.25rem;
-  padding-left: 1.5rem;
+  margin-top: 0.45rem;
+  margin-bottom: 1.1rem;
+  padding-left: 1.45rem;
 }
 
 .paper-content li {
-  margin-bottom: 0.65rem;
+  margin-bottom: 0.55rem;
+}
+
+/* Flow container so floated visuals stay contained and text wraps cleanly underneath */
+.flow-section {
+  display: flow-root;
 }
 
 .side-visual-card {
   background: var(--background-primary);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
-  padding: 1rem;
+  padding: 0.85rem;
   box-shadow: var(--shadow-md);
   text-align: center;
+  margin: 0;
+}
+
+.float-visual-right {
+  float: right;
+  width: 49%;
+  max-width: 510px;
+  margin: 0.25rem 0 1.1rem 2rem;
+}
+
+.float-visual-right.is-square-visual {
+  width: 36%;
+  max-width: 360px;
 }
 
 .side-visual-card img {
@@ -799,18 +831,28 @@ a:focus {
 }
 
 .side-visual-caption {
-  margin-top: 0.65rem;
-  font-size: 0.875rem;
+  margin-top: 0.55rem;
+  font-size: 0.86rem;
   color: var(--text-secondary);
   font-style: italic;
+  line-height: 1.4;
 }
 
 /* Dataset 3 + 2 Game Covers Grid */
+.dataset-columns {
+  margin-bottom: 0.25rem !important;
+}
+
+.dataset-footer-text {
+  margin-top: 0.5rem;
+}
+
 .game-covers-wrapper {
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
   align-items: center;
+  width: 100%;
 }
 
 .game-covers-row {
@@ -822,8 +864,8 @@ a:focus {
 
 .game-cover-item {
   margin: 0;
-  flex: 0 1 31%;
-  max-width: 150px;
+  flex: 0 1 32%;
+  max-width: 175px;
   text-align: center;
 }
 
@@ -838,30 +880,31 @@ a:focus {
 }
 
 .game-cover-item figcaption {
-  margin-top: 0.35rem;
-  font-size: 0.78rem;
+  margin-top: 0.4rem;
+  font-size: 0.84rem;
+  font-weight: 500;
   color: var(--text-secondary);
   line-height: 1.3;
 }
 
 /* Methods subsections */
 .method-subsection {
-  margin-top: 1.35rem;
-  padding-left: 1.1rem;
+  margin-top: 1.15rem;
+  padding-left: 1rem;
   border-left: 3px solid var(--primary-color);
 }
 
 .method-subsection h3 {
-  font-size: 1.08rem;
+  font-size: 1.06rem;
   font-weight: 700;
   font-style: italic;
   color: var(--text-primary);
-  margin-bottom: 0.45rem;
+  margin-bottom: 0.4rem;
 }
 
 /* Performance Metrics Table */
 .metrics-table-wrapper {
-  margin: 1.75rem 0;
+  margin: 1.5rem 0;
   overflow-x: auto;
 }
 
@@ -877,7 +920,7 @@ a:focus {
 .metrics-table th,
 .metrics-table td {
   border: 1px solid #94a3b8;
-  padding: 0.85rem 1rem;
+  padding: 0.8rem 1rem;
   text-align: center;
   vertical-align: middle;
   font-size: 0.98rem;
@@ -891,13 +934,23 @@ a:focus {
 }
 
 /* Result Figures */
+.results-pair {
+  margin-top: 1.25rem !important;
+  margin-bottom: 0.25rem !important;
+}
+
+.results-pair .figure-card {
+  margin-bottom: 0;
+  height: 100%;
+}
+
 .figure-card {
   background: var(--background-primary);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
-  padding: 1rem 1rem 0.85rem;
+  padding: 0.75rem 0.75rem 0.7rem;
   box-shadow: var(--shadow-sm);
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.35rem;
   text-align: center;
 }
 
@@ -910,13 +963,13 @@ a:focus {
 }
 
 .figure-card.is-narrow {
-  max-width: 740px;
+  max-width: 880px;
   margin-left: auto;
   margin-right: auto;
 }
 
 .figure-caption {
-  margin-top: 0.75rem;
+  margin-top: 0.65rem;
   font-size: 0.95rem;
   color: var(--text-primary);
   line-height: 1.45;
@@ -932,7 +985,7 @@ a:focus {
 .references-list li {
   padding-left: 2rem;
   text-indent: -2rem;
-  margin-bottom: 0.95rem;
+  margin-bottom: 0.9rem;
   line-height: 1.7;
   color: var(--text-primary);
   overflow-wrap: anywhere;
@@ -949,12 +1002,20 @@ a:focus {
   }
 
   .section {
-    padding: 2.5rem 1rem;
+    padding: 2.25rem 1rem;
+  }
+
+  .float-visual-right,
+  .float-visual-right.is-square-visual {
+    float: none;
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto 1.25rem;
   }
 
   .game-cover-item {
-    flex: 0 1 30%;
-    max-width: 120px;
+    flex: 0 1 31%;
+    max-width: 135px;
   }
 
   .references-list li {

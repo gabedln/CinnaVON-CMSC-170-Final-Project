@@ -86,37 +86,28 @@
       <div class="container is-max-desktop">
         <h2 class="title is-3 has-text-centered">Problem Statement and Motivation</h2>
 
-        <div class="columns is-vcentered is-variable is-6">
-          <div class="column is-7">
-            <div class="content paper-content has-text-justified">
-              <p>
-                Pathfinding, defined as the problem of finding the shortest path from source to destination while avoiding obstacles (Barnouti et al. 2016). Pathfinding is a classical problem in artificial intelligence, robotics, and video-games. On a 2D map each tile acts as a node and a valid movement counts as an edge, where straight moves cost 1 and diagonal moves cost &radic;2. Because of this, in order to find the optimal path we need to implement a weighted graph search rather than unweighted traversal. While there have been theoretical properties of search algorithms that are established in literature, this project aims to explain how differently these algorithms perform on real game maps of different sizes filled with obstacles. This project investigates the difference between three distinct search paradigms on 2D grid pathfinding:
-              </p>
-              <ul>
-                <li>
-                  <strong>Uniform Cost Search (UCS)</strong> - uninformed global search relying on accumulated path costs <em>g(n)</em>.
-                </li>
-                <li>
-                  <strong>A* Search</strong> - informed global search combining <em>g(n)</em> with a heuristic <em>h(n)</em>. For this project, the heuristic to be used is octile distance heuristic
-                </li>
-                <li>
-                  <strong>Steepest-Descent Hill Climbing</strong> - a memory local search that greedily moves to whichever immediate neighbor minimizes the <em>h(n)</em> without maintaining open frontier or backtracking history.
-                </li>
-              </ul>
-            </div>
-          </div>
+        <div class="content paper-content has-text-justified flow-section">
+          <figure class="side-visual-card float-visual-right">
+            <img src="game_covers/pathfinding-8.png" alt="Weighted graph representation of a 2D obstacle-filled room and corridor map">
+            <figcaption class="side-visual-caption">
+              Weighted 2D graph pathfinding across obstacle-filled rooms and corridors.
+            </figcaption>
+          </figure>
 
-          <div class="column is-5">
-            <figure class="side-visual-card">
-              <img src="static/images/pathfinding_graph.svg" alt="Weighted graph representation of a 2D obstacle-filled room and corridor map">
-              <figcaption class="side-visual-caption">
-                Weighted 2D graph pathfinding across obstacle-filled rooms and corridors.
-              </figcaption>
-            </figure>
-          </div>
-        </div>
-
-        <div class="content paper-content has-text-justified" style="margin-top: 0.75rem;">
+          <p>
+            Pathfinding, defined as the problem of finding the shortest path from source to destination while avoiding obstacles (Barnouti et al. 2016). Pathfinding is a classical problem in artificial intelligence, robotics, and video-games. On a 2D map each tile acts as a node and a valid movement counts as an edge, where straight moves cost 1 and diagonal moves cost &radic;2. Because of this, in order to find the optimal path we need to implement a weighted graph search rather than unweighted traversal. While there have been theoretical properties of search algorithms that are established in literature, this project aims to explain how differently these algorithms perform on real game maps of different sizes filled with obstacles. This project investigates the difference between three distinct search paradigms on 2D grid pathfinding:
+          </p>
+          <ul>
+            <li>
+              <strong>Uniform Cost Search (UCS)</strong> - uninformed global search relying on accumulated path costs <em>g(n)</em>.
+            </li>
+            <li>
+              <strong>A* Search</strong> - informed global search combining <em>g(n)</em> with a heuristic <em>h(n)</em>. For this project, the heuristic to be used is octile distance heuristic
+            </li>
+            <li>
+              <strong>Steepest-Descent Hill Climbing</strong> - a memory local search that greedily moves to whichever immediate neighbor minimizes the <em>h(n)</em> without maintaining open frontier or backtracking history.
+            </li>
+          </ul>
           <p>
             To evaluate the trade offs between the search algorithms, each is benchmarked using standardized quantitative metrics: success rate, optimality rate (within a 0.001 float tolerance), average nodes expanded, average peak open node list, and the average runtime. To ground this evaluation in real-world applications, this project uses maps from the given 2D Pathfinding Benchmarks derived from video games such as <em>Dragon Age: Origins</em>, <em>Warcraft III</em>, <em>Starcraft</em>, etc. Game specified maps with designer-built environments come with actual bottlenecks reflecting spatial challenges handled by game engines and navigation systems. Relying on this dataset also ensures a cleaner set of results without data noise seen in earlier studies. The benchmark also comes with scenario files that have pre-verified start and end goals, establishing clearer points of comparison.
           </p>
@@ -129,8 +120,8 @@
       <div class="container is-max-desktop">
         <h2 class="title is-3 has-text-centered">Dataset Description</h2>
 
-        <div class="columns is-vcentered is-variable is-6">
-          <div class="column is-5">
+        <div class="columns is-vcentered is-variable is-5 dataset-columns">
+          <div class="column is-6">
             <div class="game-covers-wrapper">
               <div class="game-covers-row">
                 <figure class="game-cover-item">
@@ -159,7 +150,7 @@
             </div>
           </div>
 
-          <div class="column is-7">
+          <div class="column is-6">
             <div class="content paper-content has-text-justified">
               <p>
                 This project uses the Moving AI Lab 2D Grid-based Pathfinding Benchmarks, a public benchmark for evaluating heuristic and uninformed search algorithms. Although the repository also provides 3D worlds and synthetic grids, the project will be focusing exclusively on 2D commercial video game maps. Commercial game environments were selected because of realistic spatial structures that provide a practical testbed for the different search algorithms. Each benchmark consists of two paired plain-text files: a <em>.map</em> file describing the static environment and a <em>.scen</em> (scenario) file defining pathfinding queries.
@@ -173,12 +164,14 @@
                   <strong>Scenario Files</strong> - Scenario files begin with a version header, followed by tab-delimited problem rows. Scenarios are partitioned into buckets and are ordered from easiest (bucket 0) to hardest. Each row contains 9 attributes: bucket number, map name, map width, map height, start x, start y, goal x, goal y, and optimal length.
                 </li>
               </ul>
-
-              <p>
-                This project utilizes all 529 maps across 6 commercial game benchmark suites from the Moving AI Lab 2D repository: Dragon Age: Origins (<em>dao</em>), Dragon Age II (<em>da2</em>), Warcraft III scaled to 512&times;512 (<em>wc3maps512</em>), Baldur's Gate II in its original dimensions (<em>bgmaps</em>), Baldur's Gate II scaled to 512&times;512 (<em>bg512</em>), and StarCraft (<em>sc1</em>).
-              </p>
             </div>
           </div>
+        </div>
+
+        <div class="content paper-content has-text-justified dataset-footer-text">
+          <p>
+            This project utilizes all 529 maps across 6 commercial game benchmark suites from the Moving AI Lab 2D repository: Dragon Age: Origins (<em>dao</em>), Dragon Age II (<em>da2</em>), Warcraft III scaled to 512&times;512 (<em>wc3maps512</em>), Baldur's Gate II in its original dimensions (<em>bgmaps</em>), Baldur's Gate II scaled to 512&times;512 (<em>bg512</em>), and StarCraft (<em>sc1</em>).
+          </p>
         </div>
       </div>
     </section>
@@ -188,43 +181,37 @@
       <div class="container is-max-desktop">
         <h2 class="title is-3 has-text-centered">Methods</h2>
 
-        <div class="columns is-vcentered is-variable is-6">
-          <div class="column is-8">
-            <div class="content paper-content has-text-justified">
-              <p>
-                The three search algorithms are navigating the same 8-connected octile grid environment. This is implemented using the helper functions <em>is_passable</em> and <em>get_neighbors</em>. For any passable cell, an agent can move in 4 cardinal directions (North, East, South, and West) which have a cost of 1, and 4 diagonal directions (Northeast, Southeast, Northwest, Southwest) which have a cost of &radic;2. However, it is also important to note that corner cutting is not allowed, meaning a diagonal move is invalid if the adjacent moves are invalid.
-              </p>
+        <div class="content paper-content has-text-justified flow-section">
+          <figure class="side-visual-card float-visual-right is-square-visual">
+            <img src="game_covers/8_connected_polygons.png" alt="8-connected octile grid movement directions">
+            <figcaption class="side-visual-caption">
+              8-connected octile grid movement directions (4 cardinal moves of cost 1 and 4 diagonal moves of cost &radic;2).
+            </figcaption>
+          </figure>
 
-              <div class="method-subsection">
-                <h3>(a) Uniform Cost Search (UCS)</h3>
-                <p>
-                  Uniform Cost Search (UCS) is an uninformed search algorithm exploring paths based on cheapest accumulated cost from the starting point <em>g(n)</em>. UCS does not know which direction the goal is located. The Python implementation uses a binary min-heap (heapq) as <em>open_list</em>, a <em>closed_list</em> set for visited nodes, and a <em>best_g</em> tracker to record lowest cost found for each coordinate. By setting the heuristic to zero (<em>h(n)</em> = 0), the algorithm expands outward in all directions until it reaches the goal. UCS is guaranteed to find a valid, shortest path if one exists, but might check unnecessary nodes along the way considering it is an uninformed search.
-                </p>
-              </div>
+          <p>
+            The three search algorithms are navigating the same 8-connected octile grid environment. This is implemented using the helper functions <em>is_passable</em> and <em>get_neighbors</em>. For any passable cell, an agent can move in 4 cardinal directions (North, East, South, and West) which have a cost of 1, and 4 diagonal directions (Northeast, Southeast, Northwest, Southwest) which have a cost of &radic;2. However, it is also important to note that corner cutting is not allowed, meaning a diagonal move is invalid if the adjacent moves are invalid.
+          </p>
 
-              <div class="method-subsection">
-                <h3>(b) A* Search (with Octile Distance Heuristic)</h3>
-                <p>
-                  A* Search is an informed search algorithm that picks which node to explore next using <em>f(n) = g(n) + h(n)</em>, where <em>g(n)</em> is the cost from the starting point and <em>h(n)</em> is the estimated cost to the goal. The octile distance is used for <em>h(n)</em> since the maps allow diagonal moves that cost &radic;2. The Python implementation uses the same search function as UCS, but with <em>octile_distance</em> as the heuristic instead of zero. This lets A* focus on nodes closer to the goal, so it expands fewer nodes than UCS while still finding the shortest path.
-                </p>
-              </div>
-
-              <div class="method-subsection">
-                <h3>(c) Steepest-descent Hill Climbing</h3>
-                <p>
-                  Steepest-descent Hill Climbing is a greedy local search algorithm that does not use memory. It iteratively evaluates all neighboring states and moves from its current state to the neighboring state with the greatest reduction in an objective or heuristic function (Poole &amp; Mackworth, 2023). Normally implemented as Steepest-ascent Hill Climbing which aims to find the maximum, Steepest-descent Hill Climbing operates in reverse for pathfinding where the aim is to find the shortest distance possible.
-                </p>
-              </div>
-            </div>
+          <div class="method-subsection">
+            <h3>(a) Uniform Cost Search (UCS)</h3>
+            <p>
+              Uniform Cost Search (UCS) is an uninformed search algorithm exploring paths based on cheapest accumulated cost from the starting point <em>g(n)</em>. UCS does not know which direction the goal is located. The Python implementation uses a binary min-heap (heapq) as <em>open_list</em>, a <em>closed_list</em> set for visited nodes, and a <em>best_g</em> tracker to record lowest cost found for each coordinate. By setting the heuristic to zero (<em>h(n)</em> = 0), the algorithm expands outward in all directions until it reaches the goal. UCS is guaranteed to find a valid, shortest path if one exists, but might check unnecessary nodes along the way considering it is an uninformed search.
+            </p>
           </div>
 
-          <div class="column is-4">
-            <figure class="side-visual-card">
-              <img src="static/images/octile_grid.svg" alt="8-connected octile grid showing cardinal cost 1, diagonal cost square root of 2, and blocked corner cutting">
-              <figcaption class="side-visual-caption">
-                Shared 8-connected octile movement model and no-corner-cutting rule implemented in Python.
-              </figcaption>
-            </figure>
+          <div class="method-subsection">
+            <h3>(b) A* Search (with Octile Distance Heuristic)</h3>
+            <p>
+              A* Search is an informed search algorithm that picks which node to explore next using <em>f(n) = g(n) + h(n)</em>, where <em>g(n)</em> is the cost from the starting point and <em>h(n)</em> is the estimated cost to the goal. The octile distance is used for <em>h(n)</em> since the maps allow diagonal moves that cost &radic;2. The Python implementation uses the same search function as UCS, but with <em>octile_distance</em> as the heuristic instead of zero. This lets A* focus on nodes closer to the goal, so it expands fewer nodes than UCS while still finding the shortest path.
+            </p>
+          </div>
+
+          <div class="method-subsection">
+            <h3>(c) Steepest-descent Hill Climbing</h3>
+            <p>
+              Steepest-descent Hill Climbing is a greedy local search algorithm that does not use memory. It iteratively evaluates all neighboring states and moves from its current state to the neighboring state with the greatest reduction in an objective or heuristic function (Poole &amp; Mackworth, 2023). Normally implemented as Steepest-ascent Hill Climbing which aims to find the maximum, Steepest-descent Hill Climbing operates in reverse for pathfinding where the aim is to find the shortest distance possible.
+            </p>
           </div>
         </div>
       </div>
@@ -303,7 +290,7 @@
         </div>
 
         <!-- Figures 1.1 and 1.2 side by side -->
-        <div class="columns is-variable is-5" style="margin-top: 1.5rem;">
+        <div class="columns is-variable is-4 results-pair">
           <div class="column is-6">
             <figure class="figure-card">
               <img src="charts/average_nodes.png" alt="Bar Graph of Average Nodes Expanded per Game">
