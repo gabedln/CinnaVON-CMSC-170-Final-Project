@@ -2,17 +2,17 @@
 
 # Evaluating Completeness, Optimality, and Efficiency Across UCS, A* Search, and Steepest-Descent Hill Climbing on 2D Video Game Pathfinding Benchmarks
 
-___
-
 The goal of this project is to observe the differences of uninformed, informed, and local search using a standardized benchmark like the 2D video game maps used as the dataset in this project. The link to the dataset can be found here:
 [DataSet](https://www.movingai.com/benchmarks/grids.html)
 
 To run the code, ensure python is installed and run main.py:
 
-Linux & macOS:
+Linux & macOS:\
+
 `python3 main.py`
 
-Windows:
+Windows:\
+
 `python main.py` or `py main.py`
 
 Evaluation Metrics:
