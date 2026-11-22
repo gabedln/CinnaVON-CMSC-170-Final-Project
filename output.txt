@@ -1,55 +1,54 @@
-UCS vs A* (octile) vs Hill Climbing on Moving AI 2D Pathfinding Benchmarks
-Group CinnaVON
+Evaluating Completeness, Optimality, and Efficiency Across UCS, A* Search, and Steepest-Descent Hill Climbing on 2D Video Game Pathfinding Benchmarks
 
-Scenarios per map: 30 (evenly spread from easiest to hardest)
+Benchmark suites: 6 (all maps per suite)
+Scenarios per map: 10 (evenly spaced from easiest to hardest)
 
-Map: lak110d (30x21)
-Method		Success		Optimal		Cost ratio	Avg nodes	Avg peak open	Avg runtime (s)
-UCS		100.0%		100.0%		1.0		85.6		20.77		0.000504
-A*		100.0%		100.0%		1.0		19.77		23.03		0.00014
-Hill Climbing	76.67%		76.67%		1.0		7.6		1.0		5e-05
 
-Map: arena (49x49)
-Method		Success		Optimal		Cost ratio	Avg nodes	Avg peak open	Avg runtime (s)
-UCS		100.0%		100.0%		1.0		1057.2		92.03		0.003241
-A*		100.0%		100.0%		1.0		82.13		75.67		0.000212
-Hill Climbing	90.0%		90.0%		1.0		20.27		1.0		6.3e-05
+Game: Baldur's Gate II (Original) (120 maps, 1200 scenarios)
+Method            Success   Optimal   Cost ratio    Avg nodes   Avg peak open   Avg runtime (s)
+UCS               100.00%   100.00%       1.0000      2535.36           75.17          0.016273
+A*                100.00%   100.00%       1.0000       973.83          124.72          0.006135
+Hill Climbing      41.67%    41.08%       1.0005        15.02            1.00          0.000129
 
-Map: den312d (65x81)
-Method		Success		Optimal		Cost ratio	Avg nodes	Avg peak open	Avg runtime (s)
-UCS		100.0%		100.0%		1.0		1274.57		57.0		0.002655
-A*		100.0%		100.0%		1.0		450.37		102.3		0.001111
-Hill Climbing	23.33%		23.33%		1.0		11.27		1.0		2.8e-05
 
-Map: ost003d (194x194)
-Method		Success		Optimal		Cost ratio	Avg nodes	Avg peak open	Avg runtime (s)
-UCS		100.0%		100.0%		1.0		7851.9		144.03		0.017711
-A*		100.0%		100.0%		1.0		4110.67		295.73		0.01041
-Hill Climbing	6.67%		6.67%		1.0		14.93		1.0		4e-05
+Game: Baldur's Gate II (512x512) (75 maps, 750 scenarios)
+Method            Success   Optimal   Cost ratio    Avg nodes   Avg peak open   Avg runtime (s)
+UCS               100.00%   100.00%       1.0000     43021.93          374.07          0.286472
+A*                100.00%   100.00%       1.0000     13468.32          960.63          0.098983
+Hill Climbing      32.00%    31.73%       1.0001        76.21            1.00          0.000663
 
-Map: den520d (256x257)
-Method		Success		Optimal		Cost ratio	Avg nodes	Avg peak open	Avg runtime (s)
-UCS		100.0%		100.0%		1.0		15696.77		220.4		0.037228
-A*		100.0%		100.0%		1.0		4421.47		389.37		0.011702
-Hill Climbing	16.67%		16.67%		1.0		25.93		1.0		7.1e-05
 
-Map: brc505d (261x193)
-Method		Success		Optimal		Cost ratio	Avg nodes	Avg peak open	Avg runtime (s)
-UCS		100.0%		100.0%		1.0		25621.17		286.6		0.060865
-A*		100.0%		100.0%		1.0		14839.77		486.67		0.038798
-Hill Climbing	13.33%		10.0%		1.0046		27.57		1.0		7.7e-05
+Game: Dragon Age: Origins (156 maps, 1560 scenarios)
+Method            Success   Optimal   Cost ratio    Avg nodes   Avg peak open   Avg runtime (s)
+UCS               100.00%   100.00%       1.0000     12300.24          143.33          0.080323
+A*                100.00%   100.00%       1.0000      5682.59          317.05          0.042182
+Hill Climbing      31.73%    31.22%       1.0004        23.73            1.00          0.000202
 
-Map: orz103d (463x456)
-Method		Success		Optimal		Cost ratio	Avg nodes	Avg peak open	Avg runtime (s)
-UCS		100.0%		100.0%		1.0		24077.83		137.0		0.058689
-A*		100.0%		100.0%		1.0		19773.43		306.67		0.051883
-Hill Climbing	3.33%		3.33%		1.0		18.33		1.0		4.9e-05
 
--------------------------------------------------
-OVERALL (210 scenarios, 7 maps)
-Method		Success		Optimal		Cost ratio	Avg nodes	Avg peak open	Avg runtime (s)
-UCS		100.0%		100.0%		1.0		10809.29		136.83		0.025842
-A*		100.0%		100.0%		1.0		6242.51		239.92		0.016322
-Hill Climbing	32.86%		32.38%		1.0003		17.99		1.0		5.4e-05
+Game: Dragon Age II (67 maps, 670 scenarios)
+Method            Success   Optimal   Cost ratio    Avg nodes   Avg peak open   Avg runtime (s)
+UCS               100.00%   100.00%       1.0000      9130.25          135.63          0.058417
+A*                100.00%   100.00%       1.0000      4137.99          285.13          0.028849
+Hill Climbing      22.39%    22.09%       1.0007        22.16            1.00          0.000178
 
-cost ratio = path cost / optimal length, solved scenarios only (1.0 = optimal)
+
+Game: StarCraft (75 maps, 750 scenarios)
+Method            Success   Optimal   Cost ratio    Avg nodes   Avg peak open   Avg runtime (s)
+UCS               100.00%   100.00%       1.0000    147914.26          669.00          1.053888
+A*                100.00%   100.00%       1.0000     52259.45         1427.16          0.416819
+Hill Climbing      15.47%    15.20%       1.0003        50.20            1.00          0.000430
+
+
+Game: Warcraft III (512x512) (36 maps, 360 scenarios)
+Method            Success   Optimal   Cost ratio    Avg nodes   Avg peak open   Avg runtime (s)
+UCS               100.00%   100.00%       1.0000     64215.06          532.04          0.420614
+A*                100.00%   100.00%       1.0000     16326.69         1053.06          0.124124
+Hill Climbing      18.33%    18.33%       1.0000        44.30            1.00          0.000366
+
+-----------------------------------------------------------------------------------------------
+OVERALL (5290 scenarios, 529 maps, 6 benchmark suites)
+Method            Success   Optimal   Cost ratio    Avg nodes   Avg peak open   Avg runtime (s)
+UCS               100.00%   100.00%       1.0000     36799.18          260.59          0.253433
+A*                100.00%   100.00%       1.0000     12850.53          568.10          0.099061
+Hill Climbing      29.62%    29.22%       1.0004        34.15            1.00          0.000291
+
