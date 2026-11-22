@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="title" content="Evaluating Completeness, Optimality, and Efficiency Across UCS, A* Search, and Steepest-Descent Hill Climbing on 2D Video Game Pathfinding Benchmarks">
+  <meta name="description" content="Benchmarking from-scratch Python implementations of Uniform Cost Search (UCS), A* Search with Octile Distance, and Steepest-Descent Hill Climbing across 529 commercial 2D video game maps (5,290 scenarios; 15,870 runs).">
+  <meta name="author" content="De Leon, Mari Gabriel D., Luna, Mira Aliyah P., Jamison, Leon Emmanuel O., Maynald, Benj T. Rodio">
+
+  <title>Evaluating Completeness, Optimality, and Efficiency Across UCS, A* Search, and Steepest-Descent Hill Climbing on 2D Video Game Pathfinding Benchmarks</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script defer src="static/js/index.js"></script>
+</head>
+<body>
+
+  <!-- Scroll to Top Button -->
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <main id="main-content">
+
+    <!-- Hero / Paper Header -->
+    <section class="hero">
+      <div class="hero-body">
+        <div class="container is-max-desktop">
+          <div class="columns is-centered">
+            <div class="column has-text-centered">
+              <h1 class="title is-1 publication-title">
+                Evaluating Completeness, Optimality, and Efficiency Across UCS, A* Search, and Steepest-Descent Hill Climbing on 2D Video Game Pathfinding Benchmarks
+              </h1>
+
+              <div class="is-size-5 publication-authors">
+                <span class="author-block">De Leon, Mari Gabriel D.,</span>
+                <span class="author-block">Luna, Mira Aliyah P.,</span>
+                <span class="author-block">Jamison, Leon Emmanuel O.,</span>
+                <span class="author-block">Maynald, Benj T. Rodio</span>
+              </div>
+
+              <div class="is-size-6 publication-venue">
+                Presented as a final project for CMSC 170
+              </div>
+
+              <div class="column has-text-centered">
+                <div class="publication-links">
+                  <span class="link-block">
+                    <a href="https://github.com/gabedln/CinnaVON-CMSC-170-Final-Project" target="_blank" rel="noopener noreferrer"
+                       class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon">
+                        <i class="fab fa-github"></i>
+                      </span>
+                      <span>Code</span>
+                    </a>
+                  </span>
+
+                  <span class="link-block">
+                    <a href="https://www.movingai.com/benchmarks/grids.html" target="_blank" rel="noopener noreferrer"
+                       class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon">
+                        <i class="fas fa-database"></i>
+                      </span>
+                      <span>Moving AI Dataset</span>
+                    </a>
+                  </span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Problem Statement and Motivation -->
+    <section class="section hero is-light" id="problem-statement">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3 has-text-centered">Problem Statement and Motivation</h2>
+
+        <div class="columns is-vcentered is-variable is-6">
+          <div class="column is-7">
+            <div class="content paper-content has-text-justified">
+              <p>
+                Pathfinding, defined as the problem of finding the shortest path from source to destination while avoiding obstacles (Barnouti et al. 2016). Pathfinding is a classical problem in artificial intelligence, robotics, and video-games. On a 2D map each tile acts as a node and a valid movement counts as an edge, where straight moves cost 1 and diagonal moves cost &radic;2. Because of this, in order to find the optimal path we need to implement a weighted graph search rather than unweighted traversal. While there have been theoretical properties of search algorithms that are established in literature, this project aims to explain how differently these algorithms perform on real game maps of different sizes filled with obstacles. This project investigates the difference between three distinct search paradigms on 2D grid pathfinding:
+              </p>
+              <ul>
+                <li>
+                  <strong>Uniform Cost Search (UCS)</strong> - uninformed global search relying on accumulated path costs <em>g(n)</em>.
+                </li>
+                <li>
+                  <strong>A* Search</strong> - informed global search combining <em>g(n)</em> with a heuristic <em>h(n)</em>. For this project, the heuristic to be used is octile distance heuristic
+                </li>
+                <li>
+                  <strong>Steepest-Descent Hill Climbing</strong> - a memory local search that greedily moves to whichever immediate neighbor minimizes the <em>h(n)</em> without maintaining open frontier or backtracking history.
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="column is-5">
+            <figure class="side-visual-card">
+              <img src="static/images/pathfinding_graph.svg" alt="Weighted graph representation of a 2D obstacle-filled room and corridor map">
+              <figcaption class="side-visual-caption">
+                Weighted 2D graph pathfinding across obstacle-filled rooms and corridors.
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+
+        <div class="content paper-content has-text-justified" style="margin-top: 0.75rem;">
+          <p>
+            To evaluate the trade offs between the search algorithms, each is benchmarked using standardized quantitative metrics: success rate, optimality rate (within a 0.001 float tolerance), average nodes expanded, average peak open node list, and the average runtime. To ground this evaluation in real-world applications, this project uses maps from the given 2D Pathfinding Benchmarks derived from video games such as <em>Dragon Age: Origins</em>, <em>Warcraft III</em>, <em>Starcraft</em>, etc. Game specified maps with designer-built environments come with actual bottlenecks reflecting spatial challenges handled by game engines and navigation systems. Relying on this dataset also ensures a cleaner set of results without data noise seen in earlier studies. The benchmark also comes with scenario files that have pre-verified start and end goals, establishing clearer points of comparison.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dataset Description -->
+    <section class="section" id="dataset-description">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3 has-text-centered">Dataset Description</h2>
+
+        <div class="columns is-vcentered is-variable is-6">
+          <div class="column is-5">
+            <div class="game-covers-wrapper">
+              <div class="game-covers-row">
+                <figure class="game-cover-item">
+                  <img src="game_covers/dragon_age_origins.png" alt="Dragon Age: Origins cover art">
+                  <figcaption>Dragon Age: Origins</figcaption>
+                </figure>
+                <figure class="game-cover-item">
+                  <img src="game_covers/dragon_age_2.png" alt="Dragon Age II cover art">
+                  <figcaption>Dragon Age II</figcaption>
+                </figure>
+                <figure class="game-cover-item">
+                  <img src="game_covers/warcraft_3.png" alt="Warcraft III: Reign of Chaos cover art">
+                  <figcaption>Warcraft III</figcaption>
+                </figure>
+              </div>
+              <div class="game-covers-row">
+                <figure class="game-cover-item">
+                  <img src="game_covers/baldurs_gate_2.png" alt="Baldur's Gate II cover art">
+                  <figcaption>Baldur's Gate II</figcaption>
+                </figure>
+                <figure class="game-cover-item">
+                  <img src="game_covers/starcraft.png" alt="StarCraft cover art">
+                  <figcaption>StarCraft</figcaption>
+                </figure>
+              </div>
+            </div>
+          </div>
+
+          <div class="column is-7">
+            <div class="content paper-content has-text-justified">
+              <p>
+                This project uses the Moving AI Lab 2D Grid-based Pathfinding Benchmarks, a public benchmark for evaluating heuristic and uninformed search algorithms. Although the repository also provides 3D worlds and synthetic grids, the project will be focusing exclusively on 2D commercial video game maps. Commercial game environments were selected because of realistic spatial structures that provide a practical testbed for the different search algorithms. Each benchmark consists of two paired plain-text files: a <em>.map</em> file describing the static environment and a <em>.scen</em> (scenario) file defining pathfinding queries.
+              </p>
+
+              <ul>
+                <li>
+                  <strong>Map Files</strong> - Each map file begins with a 4-line metadata header specifying grid geometry (type octile, height y, width x, map) followed by a y*x ASCII character matrix representing the environment. The origin (0,0) is found at the upper-left corner, where x denotes column index and y denotes the row index. The benchmark specification defines seven terrain symbols: <strong>.</strong> and <strong>G</strong> for passable terrain, <strong>@</strong> and <strong>O</strong> for out of bounds, <strong>T</strong> for trees (unpassable), <strong>S</strong> for swamp (passable from regular terrain), and <strong>W</strong> for water (traversable, but not passable from terrain)
+                </li>
+                <li>
+                  <strong>Scenario Files</strong> - Scenario files begin with a version header, followed by tab-delimited problem rows. Scenarios are partitioned into buckets and are ordered from easiest (bucket 0) to hardest. Each row contains 9 attributes: bucket number, map name, map width, map height, start x, start y, goal x, goal y, and optimal length.
+                </li>
+              </ul>
+
+              <p>
+                This project utilizes all 529 maps across 6 commercial game benchmark suites from the Moving AI Lab 2D repository: Dragon Age: Origins (<em>dao</em>), Dragon Age II (<em>da2</em>), Warcraft III scaled to 512&times;512 (<em>wc3maps512</em>), Baldur's Gate II in its original dimensions (<em>bgmaps</em>), Baldur's Gate II scaled to 512&times;512 (<em>bg512</em>), and StarCraft (<em>sc1</em>).
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Methods -->
+    <section class="section hero is-light" id="methods">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3 has-text-centered">Methods</h2>
+
+        <div class="columns is-vcentered is-variable is-6">
+          <div class="column is-8">
+            <div class="content paper-content has-text-justified">
+              <p>
+                The three search algorithms are navigating the same 8-connected octile grid environment. This is implemented using the helper functions <em>is_passable</em> and <em>get_neighbors</em>. For any passable cell, an agent can move in 4 cardinal directions (North, East, South, and West) which have a cost of 1, and 4 diagonal directions (Northeast, Southeast, Northwest, Southwest) which have a cost of &radic;2. However, it is also important to note that corner cutting is not allowed, meaning a diagonal move is invalid if the adjacent moves are invalid.
+              </p>
+
+              <div class="method-subsection">
+                <h3>(a) Uniform Cost Search (UCS)</h3>
+                <p>
+                  Uniform Cost Search (UCS) is an uninformed search algorithm exploring paths based on cheapest accumulated cost from the starting point <em>g(n)</em>. UCS does not know which direction the goal is located. The Python implementation uses a binary min-heap (heapq) as <em>open_list</em>, a <em>closed_list</em> set for visited nodes, and a <em>best_g</em> tracker to record lowest cost found for each coordinate. By setting the heuristic to zero (<em>h(n)</em> = 0), the algorithm expands outward in all directions until it reaches the goal. UCS is guaranteed to find a valid, shortest path if one exists, but might check unnecessary nodes along the way considering it is an uninformed search.
+                </p>
+              </div>
+
+              <div class="method-subsection">
+                <h3>(b) A* Search (with Octile Distance Heuristic)</h3>
+                <p>
+                  A* Search is an informed search algorithm that picks which node to explore next using <em>f(n) = g(n) + h(n)</em>, where <em>g(n)</em> is the cost from the starting point and <em>h(n)</em> is the estimated cost to the goal. The octile distance is used for <em>h(n)</em> since the maps allow diagonal moves that cost &radic;2. The Python implementation uses the same search function as UCS, but with <em>octile_distance</em> as the heuristic instead of zero. This lets A* focus on nodes closer to the goal, so it expands fewer nodes than UCS while still finding the shortest path.
+                </p>
+              </div>
+
+              <div class="method-subsection">
+                <h3>(c) Steepest-descent Hill Climbing</h3>
+                <p>
+                  Steepest-descent Hill Climbing is a greedy local search algorithm that does not use memory. It iteratively evaluates all neighboring states and moves from its current state to the neighboring state with the greatest reduction in an objective or heuristic function (Poole &amp; Mackworth, 2023). Normally implemented as Steepest-ascent Hill Climbing which aims to find the maximum, Steepest-descent Hill Climbing operates in reverse for pathfinding where the aim is to find the shortest distance possible.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="column is-4">
+            <figure class="side-visual-card">
+              <img src="static/images/octile_grid.svg" alt="8-connected octile grid showing cardinal cost 1, diagonal cost square root of 2, and blocked corner cutting">
+              <figcaption class="side-visual-caption">
+                Shared 8-connected octile movement model and no-corner-cutting rule implemented in Python.
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Experimental Setup -->
+    <section class="section" id="experimental-setup">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3 has-text-centered">Experimental Setup</h2>
+
+        <div class="content paper-content has-text-justified">
+          <p>
+            The project is concerned with deterministic search methods, hence there is no need for train or test split data. Evaluation is structured as a benchmark across 529 maps from five games, each map contributing 10 scenarios (5290 total scenarios). Since the total scenario count of all maps and all games would lead to more than 600,000 scenarios, 10 scenarios are deterministically sampled from each <em>.scen</em> file. Since scenario files are pre-sorted from the easiest to hardest index, indices are chosen using the formula <em>i * [(N-1) / (k-1)]</em> rounded off. This would give an even division of scenarios, dividing the range into 9 equal intervals capturing both easiest and hardest scenarios alongside 8 evenly spaced intermediate difficulties. Before running the search algorithms, raw benchmark files are parsed and formatted. Map files are parsed by stripping leading whitespaces and new lines, and getting the height and width. Scenario files are parsed by reducing the values to the four attributes needed for evaluation (bucket, start and goal coordinates, and the pre-computed optimal path). Every scenario is executed across the three methods, for a total of 15870 runs. Performance is evaluated across five metrics:
+          </p>
+        </div>
+
+        <div class="metrics-table-wrapper">
+          <table class="metrics-table">
+            <thead>
+              <tr>
+                <th>Performance Metric</th>
+                <th>Definition of Metric</th>
+                <th>What does this metric measure?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Success Rate (%)</td>
+                <td>Percentage of scenarios where a valid path was found.</td>
+                <td>Completeness</td>
+              </tr>
+              <tr>
+                <td>Optimality Rate (%)</td>
+                <td>Percentage of scenarios where the optimal path matches the pre-computed optimal path.</td>
+                <td>Optimality</td>
+              </tr>
+              <tr>
+                <td>Average Nodes Expanded</td>
+                <td>Mean number of states explored/expanded per scenario.</td>
+                <td>Search Efficiency</td>
+              </tr>
+              <tr>
+                <td>Average Peak Open-List Size</td>
+                <td>Mean maximum number of entries in open_list during search (always 1 for Hill Climbing, doesn't track)</td>
+                <td>Peak Memory Footprint</td>
+              </tr>
+              <tr>
+                <td>Average Runtime (s)</td>
+                <td>Mean wall-clock execution time per scenario</td>
+                <td>Execution Speed</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="content paper-content has-text-justified">
+          <p>
+            To ensure fairness in comparison, each algorithm and data parsing of raw benchmarks were done from scratch using Python's standard library under identical terrain and no-corner cutting rules. We verify optimality by checking if a found path's cost matches the stated optimal length in <em>.scen</em> files, with a 0.001 tolerance to account for the decimal rounding.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results -->
+    <section class="section hero is-light" id="results">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3 has-text-centered">Results</h2>
+
+        <div class="content paper-content has-text-justified">
+          <p>
+            The sampled 5290 scenarios were run on all three methods on an AMD Ryzen 7 6800H with Radeon Graphics CPU, averaging performance per game across the full dataset. There will be differences depending on CPU because wall-clock runtime depends on processor speed and system load, so the recorded times will have relative differences on different types of processors and machines. UCS and A* search achieved 100% on optimality and success rate, while Hill Climbing solved only 30% of scenarios overall, peaking at 42% on small maps and dropping to 15.5% on larger maps. In terms of search effort, A* cut overall node expansions by 65.1% and runtime by 61.8% (2.62x overall faster than UCS in terms of average runtime). The biggest gains in performance are present on larger maps like <em>Warcraft III</em>.
+          </p>
+          <p>
+            On average, A* held a larger active <em>open_list</em> than UCS because it pushes more towards the goal, while leaving branches queued. However, A* search still consumed less total memory across every game because of its smaller closed set. Hill Climbing finished in under 1 millisecond with O(1) memory because of early trapping. Failure rate climbed from 43% on small maps to 85.3% on bigger maps.
+          </p>
+        </div>
+
+        <!-- Figures 1.1 and 1.2 side by side -->
+        <div class="columns is-variable is-5" style="margin-top: 1.5rem;">
+          <div class="column is-6">
+            <figure class="figure-card">
+              <img src="charts/average_nodes.png" alt="Bar Graph of Average Nodes Expanded per Game">
+              <figcaption class="figure-caption">
+                <strong><em>Figure 1.1</em></strong> <em>Bar Graph of Average Nodes Expanded per Game</em>
+              </figcaption>
+            </figure>
+          </div>
+          <div class="column is-6">
+            <figure class="figure-card">
+              <img src="charts/average_runtime.png" alt="Bar Graph of Average Runtime in Seconds per Game">
+              <figcaption class="figure-caption">
+                <strong><em>Figure 1.2</em></strong> <em>Bar Graph of Average Runtime in Seconds per Game</em>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+
+        <!-- Figure 1.3 -->
+        <figure class="figure-card is-narrow">
+          <img src="charts/success_rate.png" alt="Bar Graph of Average Success Rate per Game">
+          <figcaption class="figure-caption">
+            <strong><em>Figure 1.3</em></strong> <em>Bar Graph of Average Success Rate per Game</em>
+          </figcaption>
+        </figure>
+
+        <!-- Figures 2.1 and 2.2 -->
+        <figure class="figure-card">
+          <img src="charts/speedup_reduction.png" alt="Horizontal Graphs for A* Speedup Over UCS and A* vs UCS Reduction Comparison">
+          <figcaption class="figure-caption">
+            <strong><em>Figure 2.1</em></strong> <em>Horizontal Graph for A* Speedup Over UCS</em> (left) &amp;
+            <strong><em>Figure 2.2</em></strong> <em>Horizontal Graph for A* and UCS Reduction Comparison</em> (right)
+          </figcaption>
+        </figure>
+
+        <!-- Figures 3.1 and 3.2 -->
+        <figure class="figure-card">
+          <img src="charts/frontier_total.png" alt="Bar Graphs for Average Peak Open List Among Methods and Total Node Footprint for A* and UCS">
+          <figcaption class="figure-caption">
+            <strong><em>Figure 3.1</em></strong> <em>Bar Graph for Average Peak Open List Among Methods</em> (left) &amp;
+            <strong><em>Figure 3.2</em></strong> <em>Bar Graph for Total Node Footprint (A* and UCS)</em> (right)
+          </figcaption>
+        </figure>
+
+        <!-- Figure 4.1 -->
+        <figure class="figure-card">
+          <img src="charts/hc_failure_by_size.png" alt="Line Graphs showing Failure Rate of Hill Climbing by Map Size and Optimal Path Length">
+          <figcaption class="figure-caption">
+            <strong><em>Figure 4.1</em></strong> <em>Line Graph showing Failure Rate of Hill Climbing on Size</em> (left) and <em>Failure Rate vs Optimal Path Length</em> (right)
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Discussion -->
+    <section class="section" id="discussion">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3 has-text-centered">Discussion</h2>
+
+        <div class="content paper-content has-text-justified">
+          <p>
+            The obtained results show how map layout and area affect search performance. Both UCS and A* searches obtain optimal paths (<em>Figure 1.3</em>), which proves that these searches are reliable. Additionally, it supports the idea that using octile distance as a heuristic is admissible for navigating 8-way grids. However, we can see in the figure that the speedup of A* search over UCS depends on game geometry (<em>Figure 2.1 and 2.2</em>). For open area games such as <em>Warcraft III</em> and <em>Starcraft</em>, A* goes straight toward the target because of its heuristic (3.56x speedup), but in tight and smaller maps such as <em>Dragon Age: Origins</em> and <em>Dragon Age II</em>, A* is forced to explore dead-end rooms. A* search cut node expansions by 65.1% and runtime by 61.8% compared to UCS. This extra timing gap comes from the extra per-step heuristic and queue work (<em>Figure 2.2</em>). Even though A* had a larger peak open list than UCS (<em>Figure 3.1</em>), the total stored nodes were lower compared to UCS (<em>Figure 3.2</em>).
+          </p>
+          <p>
+            Steepest-Descent Hill Climbing shows why discarding memory is inefficient and inadmissible especially in obstacle-heavy environments (<em>Figure 1.3</em>). Since Hill Climbing only looks at the immediate neighbors and there is no implementation of backtracking, it is often trapped in a local minimum. Longer paths on bigger maps often cross at least one caved obstacle, explaining why Hill Climbing failed 100% of the time on routes over 1000 units. Games having intricate dungeon maps such as <em>Dragon Age</em> trapped it even more often compared to larger maps (<em>Figure 4.1</em>).
+          </p>
+          <p>
+            It is important to note that the project has few practical limitations that affect the interpretation of the results. First, the measured runtime and results depended on the AMD CPU used to run the benchmark, as well as the additional overhead of running the Python interpreter rather than implementing the benchmarks on faster programming languages such as C or C++. The recorded runtime shows relative differences on different setups rather than fixed speeds for real-world game engines. Additionally, selecting only 10 scenarios per map covers a wide range of difficulty, but still leaves out rare edge cases present. The environment also treats all passable tiles with a uniform base cost of 1, without modelling variable terrain penalties (e.g. slower movement through swamp tiles) or moving obstacles. Finally, Steepest-Descent Hill Climbing was evaluated without memory restarts meaning its failure rate reflects pure local search rather than enhanced local search, which can be a point of improvement for further projects dealing with this dataset.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Conclusion -->
+    <section class="section hero is-light" id="conclusion">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3 has-text-centered">Conclusion</h2>
+
+        <div class="content paper-content has-text-justified">
+          <p>
+            By benchmarking from-scratch implementations of UCS, A*, and Steepest-Descent Hill Climbing across 15870 runs on commercial video game maps, this project shows the theoretical difference of informed and uninformed search algorithms in actual performance numbers, with real-world practical datasets. A* Search with Octile Distance proved to be the most efficient and correct for 2D game navigation. A* and UCS both have 100% completeness and optimality (<em>Figure 1.3</em>), however, A* search cuts node expansions by 65.1% and runs 2.62x faster than UCS (<em>Figure 1.1, 1.2, 2.1, 2.2</em>) and requiring a smaller total memory footprint (<em>Figure 3.2</em>).
+          </p>
+          <p>
+            In real-world game development and robotics engineering application, these findings offer design takeaways. Uninformed search is slow on larger maps (explores more than 150000 nodes and takes &gt;1s to run), while relying on an informed memoryless search like Hill Climbing fails often (70% overall, even 85.3% on larger maps and 100% on longer routes) to be used alone. Combining an admissible heuristic with an informed memory search like A* remains the essential foundation for reliable and efficient pathfinding in complex environments.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- References -->
+    <section class="section" id="references">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3 has-text-centered">References</h2>
+
+        <ul class="references-list">
+          <li>
+            Barnouti, N. H., Al-Dabbagh, S. S. M., &amp; Sahib Naser, M. (2016). <em>Pathfinding in Strategy Games and Maze Solving Using A* Search Algorithm</em>. Journal of Computer and Communications, 4(11), 15&ndash;25.
+          </li>
+          <li>
+            BioWare. (2000). Baldur's Gate II: Shadows of Amn [Video game]. Interplay Entertainment.
+          </li>
+          <li>
+            BioWare. (2009). <em>Dragon Age: Origins</em> [Video game]. Electronic Arts.
+          </li>
+          <li>
+            BioWare. (2011). <em>Dragon Age II</em> [Video game]. Electronic Arts.
+          </li>
+          <li>
+            Blizzard Entertainment. (1998). <em>StarCraft</em> [Video game].
+          </li>
+          <li>
+            Blizzard Entertainment. (2002). <em>Warcraft III: Reign of Chaos</em> [Video game].
+          </li>
+          <li>
+            Patel, A. (2026, May 25). <em>Heuristics</em>. Amit's Thoughts on Pathfinding.
+            <a href="https://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html" target="_blank" rel="noopener noreferrer">https://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html</a>
+          </li>
+          <li>
+            Sturtevant, N. (2012). Benchmarks for grid-based pathfinding. <em>Transactions on Computational Intelligence and AI in Games</em>, 4(2), 144&ndash;148.
+            <a href="http://web.cs.du.edu/~sturtevant/papers/benchmarks.pdf" target="_blank" rel="noopener noreferrer">http://web.cs.du.edu/~sturtevant/papers/benchmarks.pdf</a>
+          </li>
+          <li>
+            Poole, D. L., &amp; Mackworth, A. K. (2023). <em>Artificial intelligence: Foundations of computational agents</em> (3rd ed., Chapter 4: Reasoning with Constraints, Section 4.6). Cambridge University Press.
+            <a href="https://artint.info/3e/html/ArtInt3e.Ch4.S6.html" target="_blank" rel="noopener noreferrer">https://artint.info/3e/html/ArtInt3e.Ch4.S6.html</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content has-text-centered">
+            <p>
+              This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank" rel="noopener noreferrer">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank" rel="noopener noreferrer">Nerfies</a> project page.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
