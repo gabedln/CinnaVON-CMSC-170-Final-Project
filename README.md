@@ -1,10 +1,8 @@
-# CinnaVON-CMSC-170-Final-Project
-
 # Evaluating Completeness, Optimality, and Efficiency Across UCS, A* Search, and Steepest-Descent Hill Climbing on 2D Video Game Pathfinding Benchmarks
 
 ___
 
-The goal of this project is to observe the differences of uninformed, informed, and local search using a standardized benchmark like the 2D video game maps used as the dataset in this project. The link to the dataset can be found here:
+Pathfinding, defined as the problem of finding the shortest path from source to destination while avoiding obstacles (Barnouti et al. 2016). Pathfinding is a classical problem in artificial intelligence, robotics, and video-games. On a 2D map each tile acts as a node and a valid movement counts as an edge, where straight moves cost 1 and diagonal moves cost √2. Because of this, in order to find the optimal path we need to implement a weighted graph search rather than unweighted traversal. While there have been theoretical properties of search algorithms that are established in literature, this project aims to explain how differently these algorithms perform on real game maps of different sizes filled with obstacles. This project investigates the difference between three distinct search paradigms on 2D grid pathfinding. The link to the dataset can be found here:
 [DataSet](https://www.movingai.com/benchmarks/grids.html)
 
 To run the code, ensure python is installed and run main.py:
